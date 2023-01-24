@@ -11,7 +11,7 @@ public class Reservation {
     private Date checkIn;
     private Date checkOut;
 
-    public Reservation(){
+    public Reservation() {
     }
 
     public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
@@ -37,27 +37,35 @@ public class Reservation {
     }
 
     public long duration() {
-        long diff = checkOut.getTime() - checkIn.getTime(); // Aqui pegamos a diferença entre as datas em milisegundos
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); //Aqui convertemos os milisegundos em dias, chamando a variável diff, para a conversão para dias
+        long diff = checkOut.getTime() - checkIn.getTime(); // Aqui pegamos a diferença entre as datas em milisegundos com a variavel do tipo long
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); // Aqui convertemos os milisegundos em dias, chamando a variável diff, para a conversão para dias
     }
+    
+    public String updateDates(Date checkIn, Date checkOut) {
 
-    public void updateDates(Date checkIn, Date checkOut) {
+        
+        Date now = new Date();
+        if (checkIn.before(now) || checkOut.before(now)) {
+            return "Reservation dates for updates must be future dates."; //Se a lógica passar diretamente das condições, ela executa a atualização
+        } if (!checkOut.after(checkIn)) {
+            return "Check-out date must be after check-in date";
+        }
         this.checkIn = checkIn;
-        this.checkOut = checkOut; //recebe as datas que vieram como argumento, sobrepondo a variável
+        this.checkOut = checkOut; // recebe as datas que vieram como argumento, sobrepondo a variável
+        return null; // se retornar nulo, significa que o código não obteve nenhum erro na exceção
     }
 
     @Override
     public String toString() {
         return "Room "
-            + roomNumber
-            + ", check-in: "
-            + sdf.format(checkIn)
-            + ", check-out: "
-            + sdf.format(checkOut)
-            + ", "
-            + duration()
-            + " nights.";
+                + roomNumber
+                + ", check-in: "
+                + sdf.format(checkIn)
+                + ", check-out: "
+                + sdf.format(checkOut)
+                + ", "
+                + duration()
+                + " nights.";
     }
-    
-    
+
 }
