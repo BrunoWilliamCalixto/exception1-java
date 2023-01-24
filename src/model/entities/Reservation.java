@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainExceptions;
+
 public class Reservation {
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -14,7 +16,10 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer roomNumber, Date checkIn, Date checkOut) {
+    public Reservation(Integer roomNumber, Date checkIn, Date checkOut) throws DomainExceptions{
+        if (!checkOut.after(checkIn)) {
+            throw new DomainExceptions( "Check-out date must be after check-in date");
+        }
         this.roomNumber = roomNumber;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
@@ -41,18 +46,16 @@ public class Reservation {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); // Aqui convertemos os milisegundos em dias, chamando a variável diff, para a conversão para dias
     }
     
-    public String updateDates(Date checkIn, Date checkOut) {
+    public void updateDates(Date checkIn, Date checkOut) throws DomainExceptions{
 
-        
         Date now = new Date();
         if (checkIn.before(now) || checkOut.before(now)) {
-            return "Reservation dates for updates must be future dates."; //Se a lógica passar diretamente das condições, ela executa a atualização
+            throw new DomainExceptions("Reservation dates for updates must be future dates."); //Exceção do java onde usamos quando o argumento do método é inválido
         } if (!checkOut.after(checkIn)) {
-            return "Check-out date must be after check-in date";
+            throw new DomainExceptions( "Check-out date must be after check-in date");
         }
         this.checkIn = checkIn;
         this.checkOut = checkOut; // recebe as datas que vieram como argumento, sobrepondo a variável
-        return null; // se retornar nulo, significa que o código não obteve nenhum erro na exceção
     }
 
     @Override
