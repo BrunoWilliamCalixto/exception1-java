@@ -25,8 +25,8 @@ public class App {
 
             Reservation reservation = new Reservation(roomNumber, checkIn, checkOut);
             System.out.println("Reservation " + reservation);
-                
             System.out.println();
+                
             System.out.println("Enter data to update the reservation: ");
             System.out.print("Check-in date (DD/MM/YYYY): ");
             checkIn = sdf.parse(leia.next());
